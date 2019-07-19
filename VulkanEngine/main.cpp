@@ -7,8 +7,9 @@
 
 
 #include "VEInclude.h"
-
-
+int counter = 1;
+int nameCounter = 1;
+int randomNumber = 0;
 
 namespace ve {
 
@@ -41,7 +42,7 @@ namespace ve {
 
 			VELight *pLight = getSceneManagerPointer()->getLights()[0];		//first light
 
-			float speed = 10.0f * (float)event.dt;
+			float speed = 5.0f * (float)event.dt;
 
 			switch (event.idata1) {
 			case GLFW_KEY_Y:		//Z key on German keyboard!
@@ -91,33 +92,68 @@ namespace ve {
 		};
 
 		///create many cubes
-		void createCubes1(uint32_t n) {
+		void createHouse(uint32_t n) {
 
-			for (uint32_t i = 0; i < n; i++) {
-				float stride = 50.0f;
-				static std::default_random_engine e{12345};
-				static std::uniform_real_distribution<> d{ 1.0f, stride }; 
-
-				VESceneNode *e2 = m_pSceneManager->loadModel("The Cube1" + std::to_string(i), "models/test/crate1", "cube.obj");
-				e2->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, i)));
-				//e2->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
-			}
-
-		}
-
-		void createCubes0(uint32_t n) {
-
-			for (uint32_t i = 0; i < n; i++) {
+/*
 				float stride = 50.0f;
 				static std::default_random_engine e{ 12345 };
 				static std::uniform_real_distribution<> d{ 1.0f, stride };
+*/
+			for (uint32_t i = 0; i < n; i++) {
 
-				VESceneNode *e2 = m_pSceneManager->loadModel("The Cube0" + std::to_string(i), "models/test/crate0", "cube.obj");
-				e2->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 1.0f, i)));
-				//e2->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
+				randomNumber = rand() % 7;
+
+				VESceneNode *e4 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
+				e4->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-2000.0f, 1.0f, counter * 1000.0f)));
+				e4->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				randomNumber = rand() % 7;
+
+				VESceneNode *e5 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
+				e5->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, counter++ * 1000.0f)));
+				e5->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				
 			}
-
 		}
+				
+		
+				
+
+
+
+
+
+/*	PROBA: DA LI SU SVE ZGRADE OK
+
+				VESceneNode *e3 = m_pSceneManager->loadModel("The Building1", "models/buildings", "building1.obj");
+				e3->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 3000.0f)));
+				e3->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				VESceneNode *e4 = m_pSceneManager->loadModel("The Building2", "models/buildings", "building2.obj");
+				e4->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 4000.0f)));
+				e4->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				VESceneNode *e5 = m_pSceneManager->loadModel("The Building3", "models/buildings", "building3.obj");
+				e5->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 5000.0f)));
+				e5->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				VESceneNode *e6 = m_pSceneManager->loadModel("The Building4", "models/buildings", "building4.obj");
+				e6->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 6000.0f)));
+				e6->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				VESceneNode *e7 = m_pSceneManager->loadModel("The Building5", "models/buildings", "building5.obj");
+				e7->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 7000.0f)));
+				e7->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+
+				VESceneNode *e8 = m_pSceneManager->loadModel("The Building5", "models/buildings", "building6.obj");
+				e8->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 1.0f, 8000.0f)));
+				e8->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+*/
+			
+		
+
+		
 
 		///Load the first level into the game engine
 		//The engine uses Y-UP, Left-handed
@@ -138,25 +174,13 @@ namespace ve {
 			eL->multiplyTransform(glm::scale(glm::vec3(0.02f,0.02f,0.02f)));
 			VEEntity *pE = (VEEntity*)getSceneManager()->getSceneNode("The Light/sphere.obj/default/Entity_0");
 			pE->m_castsShadow = false;
-
+/*
 			VESceneNode *e1 = m_pSceneManager->loadModel("The Cube",  "models/test/crate0", "cube.obj");
 			e1->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, 1.0f, 1.0f)));
 			e1->multiplyTransform( glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
-			/*
-			createCubes0(20);
-			createCubes1(20);
-*/
-
-
-			VESceneNode *e23 = m_pSceneManager->loadModel("The House", "models/house2", "cabin.obj");
-			e23->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, 15.0f)));
-			//e23->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
-
-			VESceneNode *e24 = m_pSceneManager->loadModel("The Building", "models/building1", "Building,.obj");
-			e24->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, 5.0f)));
-			e24->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(3.0f, 3.0f, 3.0f)));
+			*/
+			createHouse(5);
 			
-
 
 			//VESceneNode *pSponza = m_pSceneManager->loadModel("Sponza", "models/sponza", "sponza.dae", aiProcess_FlipWindingOrder);
 			//pSponza->setTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));

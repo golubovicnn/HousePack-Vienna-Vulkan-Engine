@@ -40,14 +40,14 @@ namespace ve {
 
 		VECamera *pCamera = getSceneManagerPointer()->getCamera();
 		VESceneNode *pParent = pCamera->m_parent;
-
+		
 		switch (event.idata1) {
-		case GLFW_KEY_A:
-			translate = pCamera->getTransform() * glm::vec4(-1.0, 0.0, 0.0, 1.0);	//left
-			break;
-		case GLFW_KEY_D:
-			translate = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //right
-			break;
+		//case GLFW_KEY_A:
+		//	translate = pCamera->getTransform() * glm::vec4(-1.0, 0.0, 0.0, 1.0);	//left
+		//	break;
+		//case GLFW_KEY_D:
+		//	translate = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //right
+		//	break;
 		case GLFW_KEY_W:
 			translate = pCamera->getTransform() * glm::vec4(0.0, 0.0, 1.0, 1.0); //forward
 			break;
@@ -60,21 +60,21 @@ namespace ve {
 		case GLFW_KEY_E:
 			translate = glm::vec4(0.0, 1.0, 0.0, 1.0);  //up
 			break;
-		case GLFW_KEY_LEFT:							//yaw rotation is already in parent space
-			angle = (float)event.dt * -1.0f;
-			rot4 = glm::vec4(0.0, 1.0, 0.0, 1.0);
-			break;
-		case GLFW_KEY_RIGHT:						//yaw rotation is already in parent space
-			angle = (float)event.dt * 1.0f;
-			rot4 = glm::vec4(0.0, 1.0, 0.0, 1.0);
-			break;
-		case GLFW_KEY_UP:							//pitch rotation is in cam/local space
-			angle = (float)event.dt * 1.0f;			//pitch angle
-			rot4 = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //x axis from local to parent space!
-			break;
-		case GLFW_KEY_DOWN:							//pitch rotation is in cam/local space
-			angle = (float)event.dt * -1.0f;		//pitch angle
-			rot4 = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //x axis from local to parent space!
+		//case GLFW_KEY_LEFT:							//yaw rotation is already in parent space
+		//	angle = (float)event.dt * -1.0f;
+		//	rot4 = glm::vec4(0.0, 1.0, 0.0, 1.0);
+		//	break;
+		//case GLFW_KEY_RIGHT:						//yaw rotation is already in parent space
+		//	angle = (float)event.dt * 1.0f;
+		//	rot4 = glm::vec4(0.0, 1.0, 0.0, 1.0);
+		//	break;
+		//case GLFW_KEY_UP:							//pitch rotation is in cam/local space
+		//	angle = (float)event.dt * 1.0f;			//pitch angle
+		//	rot4 = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //x axis from local to parent space!
+		//	break;
+		//case GLFW_KEY_DOWN:							//pitch rotation is in cam/local space
+		//	angle = (float)event.dt * -1.0f;		//pitch angle
+		//	rot4 = pCamera->getTransform() * glm::vec4(1.0, 0.0, 0.0, 1.0); //x axis from local to parent space!
 			break;
 
 		default:

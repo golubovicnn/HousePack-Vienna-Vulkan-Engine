@@ -41,7 +41,7 @@ namespace ve {
 		loadAssets("models/standard", "sphere.obj", 0, meshes, materials);
 
 		//camera parent is used for translation rotations
-		VESceneNode *cameraParent = createSceneNode("StandardCameraParent", glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 2.0f, 0.0f)) );
+		VESceneNode *cameraParent = createSceneNode("StandardCameraParent", glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 3.0f, 1.0f)) );
 
 		//camera can only do yaw (parent y-axis) and pitch (local x-axis) rotations
 		VkExtent2D extent = getWindowPointer()->getExtent();
@@ -52,7 +52,7 @@ namespace ve {
 		setCamera( camera );
 
 		//use one light source
-		VELight *light1 = new VEDirectionalLight("StandardDirLight" );
+		VELight *light1 = new VEDirectionalLight("StandardDirLight");
 		light1->lookAt(glm::vec3(0.0f, 20.0f, -20.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		light1->m_col_ambient = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 		light1->m_col_diffuse = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
