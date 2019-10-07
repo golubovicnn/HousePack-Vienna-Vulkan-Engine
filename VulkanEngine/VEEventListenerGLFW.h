@@ -36,7 +36,7 @@ namespace ve {
 		virtual bool onMouseMove(veEvent event);
 		virtual bool onMouseButton(veEvent event);
 		virtual bool onMouseScroll(veEvent event);
-
+		
 	public:
 		///Constructor
 		VEEventListenerGLFW( std::string name ) : VEEventListener(name) { };

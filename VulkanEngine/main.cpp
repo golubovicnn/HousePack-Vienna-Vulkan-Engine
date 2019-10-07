@@ -7,9 +7,7 @@
 
 
 #include "VEInclude.h"
-int counter = 1;
-int nameCounter = 1;
-int randomNumber = 0;
+
 
 namespace ve {
 
@@ -82,7 +80,21 @@ namespace ve {
 		*/
 		MyVulkanEngine( bool debug=false) : VEEngine(debug) {};
 		~MyVulkanEngine() {};
+		uint32_t counter = 1;
+		uint32_t nameCounter = 1;
+		uint32_t randomNumber = 0;
 
+		uint32_t getCounter() {
+			return counter;
+		};
+
+		uint32_t getnameCounter() {
+			return nameCounter;
+		};
+
+		uint32_t getrandomNumber() {
+			return randomNumber;
+		};
 		///Register an event listener to interact with the user
 		virtual void registerEventListeners() {
 			VEEngine::registerEventListeners();
@@ -91,30 +103,41 @@ namespace ve {
 			registerEventListener(new VEEventListenerNuklearDebug("NuklearDebugListener"));
 		};
 
-		///create many cubes
-		void createHouse(uint32_t n) {
+
+	
+
+		///create many buildings
+		void createHouse() {
 
 /*
 				float stride = 50.0f;
 				static std::default_random_engine e{ 12345 };
 				static std::uniform_real_distribution<> d{ 1.0f, stride };
 */
-			for (uint32_t i = 0; i < n; i++) {
 
 				randomNumber = rand() % 7;
+				randomNumber = rand() % 7;
 
+				std::cout << "\nRandom Number: " << randomNumber << "\n";
 				VESceneNode *e4 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
 				e4->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-2000.0f, 1.0f, counter * 1000.0f)));
 				e4->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+				std::cout << "Buldings made: " << nameCounter-1 << "\n";
+
 
 				randomNumber = rand() % 7;
+				randomNumber = rand() % 7;
+				randomNumber = rand() % 7;
+				randomNumber = rand() % 7;
 
+				std::cout << "\nRandom Number: " << randomNumber<< "\n";
 				VESceneNode *e5 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
 				e5->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, counter++ * 1000.0f)));
 				e5->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
-
+				std::cout << "Buldings made: " << nameCounter-1 << "\n";
 				
-			}
+
+			
 		}
 				
 		
@@ -174,13 +197,17 @@ namespace ve {
 			eL->multiplyTransform(glm::scale(glm::vec3(0.02f,0.02f,0.02f)));
 			VEEntity *pE = (VEEntity*)getSceneManager()->getSceneNode("The Light/sphere.obj/default/Entity_0");
 			pE->m_castsShadow = false;
-/*
+
+			/*
 			VESceneNode *e1 = m_pSceneManager->loadModel("The Cube",  "models/test/crate0", "cube.obj");
 			e1->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, 1.0f, 1.0f)));
 			e1->multiplyTransform( glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
 			*/
-			createHouse(5);
+
+			for(uint32_t i=0; i<2;i++)
+				createHouse();
 			
+
 
 			//VESceneNode *pSponza = m_pSceneManager->loadModel("Sponza", "models/sponza", "sponza.dae", aiProcess_FlipWindingOrder);
 			//pSponza->setTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
