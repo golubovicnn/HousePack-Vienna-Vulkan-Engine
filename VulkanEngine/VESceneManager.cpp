@@ -15,9 +15,7 @@
 
 
 namespace ve {
-
 	VESceneManager * g_pVESceneManagerSingleton = nullptr;	///<Singleton pointer to the only VESceneManager instance
-
 
 	VESceneManager::VESceneManager() {
 		g_pVESceneManagerSingleton = this;
@@ -100,10 +98,7 @@ namespace ve {
 	* \param[out] materials A list of pointers to the loaded materials
 	*
 	*/
-	const aiScene* VESceneManager::loadAssets(	std::string basedir, std::string filename, 
-												uint32_t aiFlags, 
-												std::vector<VEMesh*> &meshes, 
-												std::vector<VEMaterial*> &materials) {
+	const aiScene* VESceneManager::loadAssets(std::string basedir, std::string filename, uint32_t aiFlags, std::vector<VEMesh*> &meshes, std::vector<VEMaterial*> &materials) {
 		Assimp::Importer importer;
 
 		std::string filekey = basedir + "/" + filename;
@@ -144,18 +139,14 @@ namespace ve {
 	* \param[in] parent Make the new entity a child of this parent entity
 	*
 	*/
-	VESceneNode * VESceneManager::loadModel(std::string entityName,
-												std::string basedir, 
-												std::string filename,
-												uint32_t aiFlags, 
-												VESceneNode *parent) {
-
+	VESceneNode * VESceneManager::loadModel(std::string entityName, std::string basedir, std::string filename, uint32_t aiFlags, VESceneNode *parent) {
 		Assimp::Importer importer;
 
 		std::string filekey = basedir + "/" + filename;
 
 		const aiScene* pScene = importer.ReadFile(filekey,
-			//aiProcess_FlipWindingOrder |
+			aiProcess_FlipUVs |
+			aiProcess_FlipWindingOrder |
 			//aiProcess_RemoveRedundantMaterials |
 			//aiProcess_PreTransformVertices |
 			aiProcess_GenNormals |
@@ -168,6 +159,7 @@ namespace ve {
 		if (pScene == nullptr) {
 			throw std::runtime_error("Error: Could not load asset file " + filekey + "!");
 		}
+
 		std::vector<VEMesh*> meshes;
 		createMeshes(pScene, filekey, meshes);
 
@@ -177,7 +169,7 @@ namespace ve {
 		VESceneNode *pMO = m_sceneNodes[entityName];
 		if (pMO != nullptr ) return pMO;
 
-		pMO = createSceneNode(entityName, glm::mat4(1.0f), parent); 
+		pMO = createSceneNode(entityName, glm::mat4(1.0f), parent);
 
 		copyAiNodes( pScene, meshes, materials, pScene->mRootNode, pMO);
 

@@ -86,9 +86,16 @@ namespace ve {
 		}
 
 		///add the new translation vector to the previous one
-		float speed = 6.0f;
+		float speed = 30.0f;
 		glm::vec3 trans = speed * glm::vec3(translate.x, translate.y, translate.z);
-		pParent->multiplyTransform( glm::translate(glm::mat4(1.0f), (float)event.dt * trans) );
+		glm::vec3 addVec = (float)event.dt * trans;
+		pParent->multiplyTransform(glm::translate(glm::mat4(1.0f), addVec));
+
+		distanceTraveledSinceLastMove += glm::dot(addVec, glm::vec3(0,0,1));		//Traveled distance on Z axe
+		if (distanceTraveledSinceLastMove > 12.0f) {
+			distanceTraveledSinceLastMove = 0.0f;
+			moveHousesToFront();
+		}
 
 		///combination of yaw and pitch, both wrt to parent space
 		glm::vec3  rot3 = glm::vec3(rot4.x, rot4.y, rot4.z);
@@ -214,6 +221,75 @@ namespace ve {
 		pParent->setTransform( glm::translate(pParent->getTransform(), (float)event.dt * trans) );
 
 		return false;
+	}
+
+	void VEEventListenerGLFW::createHouses(){
+		std::vector<int> randArray;
+		std::vector<int> randArray2;
+
+		for (int j = 0; j < 2; ++j) {
+			for (int i = 0; i < 7; ++i) {
+				randArray.push_back(i);
+				randArray2.push_back(i);
+			}
+		}
+
+		srand(time(0));
+		std::random_shuffle(randArray.begin(), randArray.end());
+		std::random_shuffle(randArray2.begin(), randArray2.end());
+
+		auto sceneManager = getEnginePointer()->getSceneManager();
+
+		float offset = 0.0f;
+		
+		//LEFT
+		for (auto ID : randArray) {
+			std::cout << "House ID: " << ID << std::endl;
+
+			VESceneNode *node = sceneManager->loadModel("The Building" + std::to_string(houseNamesID++), "models/buildings", "buildingV2_" + std::to_string(ID) + ".obj");
+
+			node->setTransform(glm::translate(glm::vec3(-10.0f, 0.0f, offset)));
+
+			housesLeft.push_back(node);
+
+			offset += 12.0f;
+		}
+
+		zOffsetS = offset + 12;
+		offset = 0.0f;
+
+		//RIGHT
+		for (auto ID : randArray2) {
+			std::cout << "House ID: " << ID << std::endl;
+
+			VESceneNode *node = sceneManager->loadModel("The Building" + std::to_string(houseNamesID++), "models/buildings", "buildingV2_" + std::to_string(ID) + ".obj");
+
+			node->setTransform(glm::translate(glm::vec3(10.0f, 0.0f, offset)));
+
+			housesRight.push_back(node);
+
+			offset += 12.0f;
+		}
+	}
+
+	void VEEventListenerGLFW::moveHousesToFront()
+	{
+		VESceneNode* leftHouse = housesLeft[0];
+		VESceneNode* rightHouse = housesRight[0];
+
+		housesLeft.erase(housesLeft.begin());
+		housesRight.erase(housesRight.begin());
+
+		housesLeft.push_back(leftHouse);
+		housesRight.push_back(rightHouse);
+
+
+		leftHouse->setTransform(glm::translate(glm::vec3(-10.0f, 0.0f, zOffsetS)));
+		rightHouse->setTransform(glm::translate(glm::vec3(10.0f, 0.0f, zOffsetS)));
+
+		zOffsetS += 12.0f;
+
+		std::cout << "moved houses" << std::endl;
 	}
 
 

@@ -10,7 +10,11 @@
 
 #pragma once
 
+#include "VEInclude.h"
+
 namespace ve {
+
+	class VESceneNode;
 
 	/**
 	*
@@ -21,7 +25,6 @@ namespace ve {
 	*
 	*/
 	class VEEventListenerGLFW : public VEEventListener {
-
 	protected:
 		bool  m_usePrevCursorPosition = false;			///<Can I use the previous cursor position for moving the camera?
 		bool  m_rightButtonClicked = false;				///<Is the left button currently clicked?
@@ -36,10 +39,24 @@ namespace ve {
 		virtual bool onMouseMove(veEvent event);
 		virtual bool onMouseButton(veEvent event);
 		virtual bool onMouseScroll(veEvent event);
+
+	public:
+		//street buildings
+		int houseNamesID = 1;
+		float zOffsetS = 0.0f;
+		float distanceTraveledSinceLastMove = 0.0f;
+
+
+		std::vector<VESceneNode*> housesLeft;
+		std::vector<VESceneNode*> housesRight;
+
+		void createHouses();
+		void moveHousesToFront();
+
 		
 	public:
 		///Constructor
-		VEEventListenerGLFW( std::string name ) : VEEventListener(name) { };
+		VEEventListenerGLFW(std::string name) : VEEventListener(name) { };
 		///Destructor
 		virtual ~VEEventListenerGLFW() {};
 	};

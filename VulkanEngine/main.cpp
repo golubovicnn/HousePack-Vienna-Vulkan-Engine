@@ -71,6 +71,10 @@ namespace ve {
 
 	///user defined manager class, derived from VEEngine
 	class MyVulkanEngine : public VEEngine {
+
+	private:
+		std::vector<VESceneNode*> buildingsPool;
+
 	protected:
 
 	public:
@@ -78,11 +82,13 @@ namespace ve {
 		* \brief Constructor of my engine
 		* \param[in] debug Switch debuggin on or off
 		*/
-		MyVulkanEngine( bool debug=false) : VEEngine(debug) {};
-		~MyVulkanEngine() {};
+		MyVulkanEngine( bool debug=false) : VEEngine(debug) {}
+		~MyVulkanEngine() {}
 		uint32_t counter = 1;
 		uint32_t nameCounter = 1;
 		uint32_t randomNumber = 0;
+
+		VEEventListenerGLFW* cameraEventListener;
 
 		uint32_t getCounter() {
 			return counter;
@@ -97,48 +103,14 @@ namespace ve {
 		};
 		///Register an event listener to interact with the user
 		virtual void registerEventListeners() {
-			VEEngine::registerEventListeners();
+			cameraEventListener = new VEEventListenerGLFW("StandardEventListener");
+			registerEventListener(cameraEventListener); //register a standard listener
 			registerEventListener( new LightListener("LightListener"));
 			//registerEventListener(new VEEventListenerNuklear("NuklearListener"));
 			registerEventListener(new VEEventListenerNuklearDebug("NuklearDebugListener"));
 		};
 
-
-	
-
-		///create many buildings
-		void createHouse() {
-
-/*
-				float stride = 50.0f;
-				static std::default_random_engine e{ 12345 };
-				static std::uniform_real_distribution<> d{ 1.0f, stride };
-*/
-
-				randomNumber = rand() % 7;
-				randomNumber = rand() % 7;
-
-				std::cout << "\nRandom Number: " << randomNumber << "\n";
-				VESceneNode *e4 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
-				e4->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(-2000.0f, 1.0f, counter * 1000.0f)));
-				e4->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
-				std::cout << "Buldings made: " << nameCounter-1 << "\n";
-
-
-				randomNumber = rand() % 7;
-				randomNumber = rand() % 7;
-				randomNumber = rand() % 7;
-				randomNumber = rand() % 7;
-
-				std::cout << "\nRandom Number: " << randomNumber<< "\n";
-				VESceneNode *e5 = m_pSceneManager->loadModel("The Building" + std::to_string(nameCounter++), "models/buildings", "building" + std::to_string(randomNumber) + ".obj");
-				e5->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, counter++ * 1000.0f)));
-				e5->multiplyTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
-				std::cout << "Buldings made: " << nameCounter-1 << "\n";
-				
-
-			
-		}
+		
 				
 		
 				
@@ -181,9 +153,7 @@ namespace ve {
 		///Load the first level into the game engine
 		//The engine uses Y-UP, Left-handed
 		void loadLevel() {
-
-			VESceneNode *sp1 = m_pSceneManager->createSkybox("The Sky", "models/test/sky/cloudy",
-			{ "bluecloud_ft.jpg", "bluecloud_bk.jpg", "bluecloud_up.jpg", "bluecloud_dn.jpg", "bluecloud_rt.jpg", "bluecloud_lf.jpg" });		
+			VESceneNode *sp1 = m_pSceneManager->createSkybox("The Sky", "models/test/sky/cloudy", { "bluecloud_ft.jpg", "bluecloud_bk.jpg", "bluecloud_up.jpg", "bluecloud_dn.jpg", "bluecloud_rt.jpg", "bluecloud_lf.jpg" });		
 			RotatorListener *pRot = new RotatorListener("CubemapRotator", sp1, 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 			getEnginePointer()->registerEventListener(pRot);
 
@@ -198,19 +168,7 @@ namespace ve {
 			VEEntity *pE = (VEEntity*)getSceneManager()->getSceneNode("The Light/sphere.obj/default/Entity_0");
 			pE->m_castsShadow = false;
 
-			/*
-			VESceneNode *e1 = m_pSceneManager->loadModel("The Cube",  "models/test/crate0", "cube.obj");
-			e1->setTransform(glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, 1.0f, 1.0f)));
-			e1->multiplyTransform( glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f)));
-			*/
-
-			for(uint32_t i=0; i<2;i++)
-				createHouse();
-			
-
-
-			//VESceneNode *pSponza = m_pSceneManager->loadModel("Sponza", "models/sponza", "sponza.dae", aiProcess_FlipWindingOrder);
-			//pSponza->setTransform(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
+			cameraEventListener->createHouses();
 
 		};
 	};
@@ -222,6 +180,8 @@ using namespace ve;
 int main() {
 
 	MyVulkanEngine mve(true);	//enable or disable debugging (=callback, valication layers)
+
+	
 
 	try {
 		mve.initEngine();
